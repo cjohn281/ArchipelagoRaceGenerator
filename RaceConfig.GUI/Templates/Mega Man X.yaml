@@ -1,0 +1,230 @@
+﻿# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
+#
+# Q. How do I use it?
+# A. The options in this file are weighted. This means the higher number you assign to a value, the
+#    more chances you have for that option to be chosen. For example, an option like this:
+#
+#    map_shuffle:
+#      on: 5
+#      off: 15
+#
+#    Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
+#    off.
+#
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify that your Archipelago options are valid at this site:
+#        https://archipelago.gg/check
+
+# Your name in-game, limited to 16 characters.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+name: Player{number}
+
+# Used to describe your yaml. Useful if you have multiple files.
+description: Default Mega Man X Template
+
+game: Mega Man X
+requires:
+  version: 0.6.0 # Version of Archipelago required for this yaml to work as expected.
+
+Mega Man X:
+  # Game Options
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # 
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # 
+    # **Full:** ensure everything can be reached and acquired.
+    # 
+    # **Minimal:** ensure what is needed to reach your goal can be acquired.
+    full: 50
+    minimal: 0
+
+  death_link:
+    # When you die, everyone who enabled death link dies. Of course, the reverse is true too.
+    'false': 50
+    'true': 0
+
+  energy_link:
+    # Enable EnergyLink support.
+    # EnergyLink works as a big Sub Tank/HP pool where players can request HP manually or automatically when
+    # they lose HP. You make use of this feature by typing /pool, /heal <amount> or /autoheal in the client.
+    'false': 0
+    'true': 50
+
+  starting_life_count:
+    # How many lives to start the game with. 
+    # Note: This number becomes the new default life count, meaning that it will persist after a game over.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 9
+    2: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  jammed_buster:
+    # Jams X's buster making it only able to shoot lemons.
+    # Note: This adds another Arms Upgrade into the item pool.
+    'false': 50
+    'true': 0
+
+  pickupsanity:
+    # Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
+    'false': 50
+    'true': 0
+
+  logic_boss_weakness:
+    # Every main boss will logically expect you to have its weakness.
+    'false': 0
+    'true': 50
+
+  logic_leg_sigma:
+    # Sigma's Fortress will logically expect you to have the legs upgrade.
+    'false': 0
+    'true': 50
+
+  logic_charged_shotgun_ice:
+    # Adds Charged Shotgun Ice as logic to some locations. Some of those may be hard to execute.
+    'false': 50
+    'true': 0
+
+  early_legs:
+    # Places the Legs Upgrade item in sphere 1.
+    'false': 50
+    'true': 0
+
+  sigma_open:
+    # Under what conditions will Sigma's Fortress open.
+    #   multiworld: Access will require an Access Code multiworld item, similar to the main stages.
+    #   medals: Access will be granted after collecting a certain amount of Maverick Medals.
+    #   weapons: Access will be granted after collecting a certain amount of weapons.
+    #   armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
+    #   heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
+    #   sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
+    #   all: Access will be granted after collecting a certain amount of Medals, Weapons, Armor Upgrades
+    #        Heart Tanks and Sub Tanks.
+    # Do not enable all on solo seeds without pickupsanity or sessions with very few items.
+    # There's a big chance it'll cause an error.
+    multiworld: 0
+    medals: 50
+    weapons: 0
+    armor_upgrades: 0
+    heart_tanks: 0
+    sub_tanks: 0
+    all: 0
+
+  sigma_medal_count:
+    # How many Maverick Medals are required to access Sigma's Fortress.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  sigma_weapon_count:
+    # How many weapons are required to access Sigma's Fortress.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  sigma_upgrade_count:
+    # How many armor upgrades are required to access Sigma's Fortress.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 4
+    3: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  sigma_heart_tank_count:
+    # How many Heart Tanks are required to access Sigma's Fortress.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  sigma_sub_tank_count:
+    # How many Sub Tanks are required to access Sigma's Fortress.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 4
+    4: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  # Item & Location Options
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with these items.
+    {}
+
+  start_inventory_from_pool:
+    # Start with these items and don't place them in the world.
+    # 
+    # The game decides what the replacement items will be.
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the ``!hint`` command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the ``!hint`` command.
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item.
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item.
+    []
+
+  item_links:
+    # Share part of your item pool with other players.
+    []

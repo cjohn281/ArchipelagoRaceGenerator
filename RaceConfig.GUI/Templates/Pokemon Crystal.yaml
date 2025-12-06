@@ -1,0 +1,396 @@
+﻿# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
+#
+# Q. How do I use it?
+# A. The options in this file are weighted. This means the higher number you assign to a value, the
+#    more chances you have for that option to be chosen. For example, an option like this:
+#
+#    map_shuffle:
+#      on: 5
+#      off: 15
+#
+#    Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
+#    off.
+#
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify that your Archipelago options are valid at this site:
+#        https://archipelago.gg/check
+
+# Your name in-game, limited to 16 characters.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+name: Player{number}
+
+# Used to describe your yaml. Useful if you have multiple files.
+description: Default Pokemon Crystal Template
+
+game: Pokemon Crystal
+requires:
+  version: 0.6.0 # Version of Archipelago required for this yaml to work as expected.
+
+Pokemon Crystal:
+  # Game Options
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # 
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # 
+    # **Full:** ensure everything can be reached and acquired.
+    # 
+    # **Minimal:** ensure what is needed to reach your goal can be acquired.
+    full: 50
+    minimal: 0
+
+  goal:
+    # Elite Four: collect 8 badges and enter the Hall of Fame
+    #     Red: collect 16 badges and defeat Red at Mt. Silver
+    elite_four: 50
+    red: 0
+
+  johto_only:
+    # Excludes all of Kanto, disables early Kanto access
+    #     Forces Goal to Elite Four unless Silver Cave is included.
+    #     Goal badges will be limited to 8 if badges are shuffled or vanilla
+    'off': 50
+    'on': 0
+    include_silver_cave: 0
+
+  elite_four_badges:
+    # Number of badges required to enter Victory Road
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 1
+    # Maximum value is 16
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  red_badges:
+    # Number of badges required to open Silver Cave
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 1
+    # Maximum value is 16
+    16: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  randomize_badges:
+    # Shuffles badges into the pool
+    vanilla: 0
+    shuffle: 0
+    completely_random: 50
+
+  randomize_hidden_items:
+    # Shuffles hidden items into the pool
+    'false': 50
+    'true': 0
+
+  require_itemfinder:
+    # Hidden items require Itemfinder in logic
+    'false': 0
+    'true': 50
+
+  trainersanity:
+    # Adds checks for defeating trainers
+    'false': 50
+    'true': 0
+
+  trainersanity_alerts:
+    # Shows a message box or plays a sound for trainersanity checks
+    no_alerts: 0
+    message_box: 50
+    sound_only: 0
+
+  randomize_pokegear:
+    # Shuffles the Pokegear and cards into the pool
+    'false': 50
+    'true': 0
+
+  randomize_berry_trees:
+    # Shuffles berry tree items into the pool
+    'false': 50
+    'true': 0
+
+  randomize_starters:
+    # Randomizes species of starter Pokemon
+    vanilla: 50
+    unevolved_only: 0
+    completely_random: 0
+
+  randomize_wilds:
+    # Randomizes species of wild Pokemon
+    'false': 50
+    'true': 0
+
+  normalize_encounter_rates:
+    # Normalizes chance of encountering each wild Pokemon slot
+    'false': 50
+    'true': 0
+
+  randomize_static_pokemon:
+    # Randomizes species of static Pokemon encounters
+    'false': 50
+    'true': 0
+
+  randomize_trainer_parties:
+    # Randomizes Pokemon in enemy trainer parties
+    vanilla: 50
+    match_types: 0
+    completely_random: 0
+
+  randomize_learnsets:
+    # vanilla: Vanilla movesets
+    # randomize: Random movesets
+    # start_with_four_moves: Random movesets with 4 starting moves
+    vanilla: 50
+    randomize: 0
+    start_with_four_moves: 0
+
+  randomize_tm_moves:
+    # Randomizes the moves available as TMs
+    'false': 50
+    'true': 0
+
+  tm_compatibility:
+    # Percent chance for Pokemon to be compatible with a TM
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 100
+    random: 0
+    random-low: 0
+    random-high: 0
+    vanilla: 50 # equivalent to 0
+    fully_compatible: 0 # equivalent to 100
+
+  hm_compatibility:
+    # Percent chance for Pokemon to be compatible with a HM
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 100
+    random: 0
+    random-low: 0
+    random-high: 0
+    vanilla: 50 # equivalent to 0
+    fully_compatible: 0 # equivalent to 100
+
+  randomize_base_stats:
+    # vanilla: Vanilla base stats
+    # keep_bst: Random base stats, but base stat total is preserved
+    # completely_random: Base stats and BST are completely random
+    vanilla: 50
+    keep_bst: 0
+    completely_random: 0
+
+  randomize_types:
+    # vanilla: Vanilla Pokemon types
+    # follow_evolutions: Types are randomized but preserved when evolved
+    # completely_random: Types are completely random
+    vanilla: 50
+    follow_evolutions: 0
+    completely_random: 0
+
+  randomize_palettes:
+    # vanilla: Vanilla Pokemon color palettes
+    # match_types: Color palettes match Pokemon Type
+    # completely_random: Color palettes are completely random
+    vanilla: 50
+    match_types: 0
+    completely_random: 0
+
+  randomize_music:
+    # Randomize all music
+    'false': 50
+    'true': 0
+
+  free_fly_location:
+    # If enabled, unlocks a random fly location for free.
+    # If free_fly_and_map_card is selected, an extra fly location
+    # is unlocked when the pokegear and map card are obtained
+    'off': 50
+    free_fly: 0
+    free_fly_and_map_card: 0
+
+  hm_badge_requirements:
+    # vanilla: HMs require their vanilla badges
+    # no_badges: HMs do not require a badge to use
+    # add_kanto: HMs can be used with the Johto or Kanto badge
+    vanilla: 50
+    no_badges: 0
+    add_kanto: 0
+
+  reusable_tms:
+    # TMs can be used an infinite number of times
+    'false': 50
+    'true': 0
+
+  guaranteed_catch:
+    # Balls have a 100% success rate
+    'false': 50
+    'true': 0
+
+  minimum_catch_rate:
+    # Sets a minimum catch rate for wild Pokemon
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 255
+    0: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  blind_trainers:
+    # Trainers have no vision and will not start battles unless interacted with
+    'false': 50
+    'true': 0
+
+  better_marts:
+    # Improves the selection of items at Pokemarts
+    'false': 50
+    'true': 0
+
+  experience_modifier:
+    # Scale the amount of Experience Points given in battle.
+    # Default is 20, for double set to 40, for half set to 10, etc.
+    # Must be between 1 and 255
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 1
+    # Maximum value is 255
+    20: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  phone_trap_weight:
+    # Adds random Pokegear calls as traps
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    0: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  sleep_trap_weight:
+    # Trap that causes Sleep status on your party
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    0: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  poison_trap_weight:
+    # Trap that causes Poison status on your party
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    0: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  burn_trap_weight:
+    # Trap that causes Burn status on your party
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    0: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  freeze_trap_weight:
+    # Trap that causes Freeze status on your party
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    0: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  paralysis_trap_weight:
+    # Trap that causes Paralysis status on your party
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    0: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  item_receive_sound:
+    # Play item received sound on receiving a remote item
+    'false': 0
+    'true': 50
+
+  enable_mischief:
+    # If I told you what this does, it would ruin the surprises :)
+    'false': 50
+    'true': 0
+
+  # Item & Location Options
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with these items.
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the ``!hint`` command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the ``!hint`` command.
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item.
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item.
+    []
+
+  item_links:
+    # Share part of your item pool with other players.
+    []

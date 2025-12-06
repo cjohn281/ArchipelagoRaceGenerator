@@ -1,0 +1,235 @@
+﻿# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
+#
+# Q. How do I use it?
+# A. The options in this file are weighted. This means the higher number you assign to a value, the
+#    more chances you have for that option to be chosen. For example, an option like this:
+#
+#    map_shuffle:
+#      on: 5
+#      off: 15
+#
+#    Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
+#    off.
+#
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify that your Archipelago options are valid at this site:
+#        https://archipelago.gg/check
+
+# Your name in-game, limited to 16 characters.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+name: Player{number}
+
+# Used to describe your yaml. Useful if you have multiple files.
+description: Default Metroid Zero Mission Template
+
+game: Metroid Zero Mission
+requires:
+  version: 0.6.0 # Version of Archipelago required for this yaml to work as expected.
+
+Metroid Zero Mission:
+  # Game Options
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # 
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # 
+    # **Full:** ensure everything can be reached and acquired.
+    # 
+    # **Minimal:** ensure what is needed to reach your goal can be acquired.
+    full: 50
+    minimal: 0
+
+  goal:
+    # What you will be required to do to beat the game.
+    # Mecha Ridley: Mecha Ridley is always open and can be reached as long as you have the right items.
+    # Bosses: The door to Mecha Ridley is locked until Kraid, Ridley, Mother Brain, and the Chozo Ghost are defeated.
+    mecha_ridley: 0
+    bosses: 50
+
+  remote_items:
+    # Indicates you get items sent from your own world, allowing co-op play of a world.
+    # When enabled, you will not lose the items you've collected from your own world if you reset or game-over.
+    # 
+    # Regardless of this setting, you can still play a single-player game without connecting to a server.
+    # However, you will not benefit from your items being returned to you when you reload a save.
+    'false': 0
+    'true': 50
+
+  death_link:
+    # When you die, everyone who enabled death link dies. Of course, the reverse is true too.
+    'false': 50
+    'true': 0
+
+  # World
+  chozodia_access:
+    # Open: You can access Chozodia at any time by using a Power Bomb to open the doors.
+    # Closed: You must defeat Mother Brain to access Chozodia.
+    open: 50
+    closed: 0
+
+  skip_chozodia_stealth:
+    # After escaping Tourian, place Samus in the save room just outside of the Chozo Ghost's room in Chozodia.
+    'false': 0
+    'true': 50
+
+  unknown_items_always_usable:
+    # Unknown Items (Plasma Beam, Space Jump, and Gravity Suit) are activated and usable as soon as
+    # they are received.
+    # 
+    # When this option is disabled, the player will need to defeat the Chozo Ghost in Chozodia as ZSS in order
+    # to unlock Samus' fully-powered suit, after which they may then use the Plasma Beam, Space Jump,
+    # and Gravity Suit, as in the unmodified game.
+    'false': 0
+    'true': 50
+
+  layout_patches:
+    # Slightly modify the layout of some rooms to reduce softlocks.
+    # NOTE: You can warp to the starting room from any save station or Samus' ship by holding L+R while selecting "No"
+    # when asked to save.
+    'false': 0
+    'true': 50
+
+  morph_ball:
+    # Influences where the Morph Ball will be placed.
+    # Normal: Shuffled into the pool with no special treatment.
+    # Early: Forced to be local in an early location.
+    normal: 0
+    early: 50
+
+  start_with_maps:
+    # Start the game with all map stations visited.
+    'false': 0
+    'true': 50
+
+  # Logic
+  logic_difficulty:
+    # Determines the general difficulty of the game's logic. On advanced difficulty, more niche techniques and game
+    # knowledge may be required to collect items or progress, and you may be required to complete areas or bosses
+    # with the minimum required resources. Examples of "tricks" this may put in logic include entering invisible tunnels,
+    # jump extends, and Acid Worm skip.
+    # 
+    # Other specific tricks (such as difficult Shinesparks and horizontal IBJ) have individual difficulty settings that
+    # this does not affect.
+    normal: 50
+    advanced: 0
+
+  ibj_in_logic:
+    # Allows for using IBJ (infinite bomb jumping) in logic.
+    # 
+    # Enabling this option may require you to traverse long vertical and/or horizontal distances using only bombs.
+    # 
+    # If disabled, this option does not disable performing IBJ, but it will never be logically required.
+    none: 50
+    vertical_only: 0
+    horizontal_and_vertical: 0
+
+  heatruns_lavadives:
+    # Allows for traversing heated rooms and acid/lava dives without the appropriate suit(s) in logic.
+    # 
+    # When enabled, logic will ensure you have a reasonable amount of energy before requiring an environmental damage
+    # run. When disabled, you will not be required to endure any environmental damage before receiving the appropriate
+    # mitigating suit.
+    'false': 50
+    'true': 0
+
+  walljumps_in_logic:
+    # Allows for using walljumps in logic. You may be required to walljump instead of using items such as Hi-Jump or
+    # Power Grip in order to logically progress, where possible.
+    # 
+    # Disabling this option will not remove the ability to walljump, but it will never be logically required.
+    'false': 0
+    'true': 50
+
+  tricky_shinesparks:
+    # If enabled, logic will include long, difficult, and/or unintuitive Shinesparks as valid methods of collecting
+    # items or traversing areas that normally would not require an advanced Shinespark to collect.
+    # 
+    # This has no effect on long Shinespark puzzles which are the intended way of collecting an item, such as the long
+    # Shinespark chain in Chozodia near the Chozo Ghost room.
+    'false': 50
+    'true': 0
+
+  # Cosmetic
+  fast_item_banners:
+    # Makes the banner that appears when you collect an item much quicker, and makes it play a sound
+    # related to the item when it appears.
+    'false': 0
+    'true': 50
+
+  display_nonlocal_items:
+    # How to display items that will be sent to other players.
+    # 
+    # Match Series: Items from Super Metroid and SMZ3 display as their counterpart in Zero Mission.
+    # Match Game: Items for other Zero Mission worlds appear as the item that will be sent.
+    # None: All items for other players appear as Archipelago logos.
+    none: 0
+    match_game: 0
+    match_series: 50
+
+  # Item & Location Options
+  junk_fill_weights:
+    # Specify the distribution of extra capacity expansions that should be used to fill vacancies in the pool.
+    # This option only has any effect if there are unfilled locations, e.g. when some items are removed.
+    Missile Tank: 1
+    Nothing: 0
+    Power Bomb Tank: 0
+    Super Missile Tank: 0
+
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with these items.
+    {}
+
+  start_inventory_from_pool:
+    # Start with these items and don't place them in the world.
+    # 
+    # The game decides what the replacement items will be.
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the ``!hint`` command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the ``!hint`` command.
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item.
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item.
+    []
+
+  item_links:
+    # Share part of your item pool with other players.
+    []

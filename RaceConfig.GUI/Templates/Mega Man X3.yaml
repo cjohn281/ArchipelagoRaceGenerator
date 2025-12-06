@@ -1,0 +1,346 @@
+﻿# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
+#
+# Q. How do I use it?
+# A. The options in this file are weighted. This means the higher number you assign to a value, the
+#    more chances you have for that option to be chosen. For example, an option like this:
+#
+#    map_shuffle:
+#      on: 5
+#      off: 15
+#
+#    Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
+#    off.
+#
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify that your Archipelago options are valid at this site:
+#        https://archipelago.gg/check
+
+# Your name in-game, limited to 16 characters.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+name: Player{number}
+
+# Used to describe your yaml. Useful if you have multiple files.
+description: Default Mega Man X3 Template
+
+game: Mega Man X3
+requires:
+  version: 0.6.0 # Version of Archipelago required for this yaml to work as expected.
+
+Mega Man X3:
+  # Game Options
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # 
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # 
+    # **Full:** ensure everything can be reached and acquired.
+    # 
+    # **Minimal:** ensure what is needed to reach your goal can be acquired.
+    full: 50
+    minimal: 0
+
+  death_link:
+    # When you die, everyone who enabled death link dies. Of course, the reverse is true too.
+    'false': 50
+    'true': 0
+
+  energy_link:
+    # Enable EnergyLink support.
+    # EnergyLink works as a big Sub Tank/HP pool where players can request HP manually or automatically when
+    # they lose HP. You make use of this feature by typing /pool, /heal <amount> or /autoheal in the client.
+    'false': 0
+    'true': 50
+
+  starting_life_count:
+    # How many lives to start the game with. 
+    # Note: This number becomes the new default life count, meaning that it will persist after a game over.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 9
+    2: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  jammed_buster:
+    # Jams X's buster making it only able to shoot lemons.
+    # Note: This adds another Arms Upgrade into the item pool.
+    'false': 50
+    'true': 0
+
+  disable_charge_freeze:
+    # Allows X and Zero to move while shooting a level 3 charged shot.
+    'false': 0
+    'true': 50
+
+  pickupsanity:
+    # Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
+    'false': 50
+    'true': 0
+
+  logic_boss_weakness:
+    # Every main boss will logically expect you to have its weakness.
+    'false': 0
+    'true': 50
+
+  logic_vile_required:
+    # Adds a logic check for Dr. Doppler's Lab access so that it expects Vile to be defeated before accessing it.
+    # Note: It does not affect the actual Dr. Doppler's Lab access options.
+    'false': 0
+    'true': 50
+
+  logic_z_saber:
+    # Adds the Z-Saber to the game's logic.
+    not_required: 0
+    required_for_lab_1: 0
+    required_for_lab_2: 0
+    required_for_lab_3: 50
+    required_for_doppler: 0
+    only_sigma: 0
+
+  doppler_lab_2_boss:
+    # Which boss will appear in the second Dr Doppler's Lab stage.
+    # Note: Also affects the stage variation.
+    volt_kurageil: 50
+    vile: 0
+
+  doppler_lab_3_boss_rematch_count:
+    # How many boss rematches are needed in the third Dr. Doppler's Lab stage.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  doppler_open:
+    # Under what conditions will Dr. Doppler's lab open.
+    #   multiworld: Access will require an Access Code multiworld item, similar to the main stages.
+    #   medals: Access will be granted after collecting a certain amount of Maverick Medals.
+    #   weapons: Access will be granted after collecting a certain amount of weapons.
+    #   armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
+    #   heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
+    #   sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
+    #   all: Access will be granted after collecting a certain amount of Medals, Weapons, Armor Upgrades
+    #        Heart Tanks and Sub Tanks.
+    multiworld: 0
+    medals: 50
+    weapons: 0
+    armor_upgrades: 0
+    heart_tanks: 0
+    sub_tanks: 0
+    all: 0
+
+  doppler_medal_count:
+    # How many Maverick Medals are required to access Dr. Doppler's Lab.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  doppler_weapon_count:
+    # How many weapons are required to access Dr. Doppler's Lab.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  doppler_upgrade_count:
+    # How many armor upgrades are required to access Dr. Doppler's Lab.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    5: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  doppler_heart_tank_count:
+    # How many Heart Tanks are required to access Dr. Doppler's Lab.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    8: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  doppler_sub_tank_count:
+    # How many Sub Tanks are required to access Dr. Doppler's Lab.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 4
+    4: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  vile_open:
+    # Under what conditions will Vile's Stage open.
+    #   multiworld: Access will require an Access Code multiworld item, similar to the main stages.
+    #   medals: Access will be granted after collecting a certain amount of Maverick Medals.
+    #   weapons: Access will be granted after collecting a certain amount of weapons.
+    #   armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
+    #   heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
+    #   sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
+    #   all: Access will be granted after collecting a certain amount of Medals, Weapons, Armor Upgrades
+    #        Heart Tanks and Sub Tanks.
+    multiworld: 0
+    medals: 50
+    weapons: 0
+    armor_upgrades: 0
+    heart_tanks: 0
+    sub_tanks: 0
+    all: 0
+
+  vile_medal_count:
+    # How many Maverick Medals are required to access Vile's Stage.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    2: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  vile_weapon_count:
+    # How many weapons are required to access Vile's Stage.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    2: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  vile_upgrade_count:
+    # How many armor upgrades are required to access Vile's Stage.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    4: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  vile_heart_tank_count:
+    # How many Heart Tanks are required to access Vile's Stage.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 8
+    4: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  vile_sub_tank_count:
+    # How many Sub Tanks are required to access Vile's Stage.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 4
+    2: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  bit_medal_count:
+    # How many Maverick Medals are required to access Bit's fight.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 5
+    2: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  byte_medal_count:
+    # How many Maverick Medals are required to access Byte's fight.
+    # Note: If Byte's medal count is less than or equal to Bit's, the value will be adjusted to Bit's + 1.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 1
+    # Maximum value is 6
+    5: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  # Item & Location Options
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with these items.
+    {}
+
+  start_inventory_from_pool:
+    # Start with these items and don't place them in the world.
+    # 
+    # The game decides what the replacement items will be.
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the ``!hint`` command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the ``!hint`` command.
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item.
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item.
+    []
+
+  item_links:
+    # Share part of your item pool with other players.
+    []

@@ -1,0 +1,105 @@
+# Visual Studio internals
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs (SDK-style projects)
+bin/
+obj/
+[Bb]uild[Ll]og.*
+
+# MSBuild logs
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# NuGet
+*.nupkg
+# If you use a local packages folder, uncomment:
+# packages/
+# NuGet lock file (usually tracked for reproducible restores; keep if present)
+# packages.lock.json
+
+# .NET Core/SDK
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider/JetBrains
+.idea/
+*.sln.iml
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Coverlet
+coverage.*
+.coverage/
+.coverage_output/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# OS file junk
+[Tt]humbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.tmp
+
+# Logs
+*.log
+
+# MSIX/Appx packaging (if you add packaging project)
+AppPackages/
+*.msix
+*.appx
+*.msixbundle
+*.appxbundle
+*.msixupload
+*.appxupload
+*.appxsym
+
+# Symbol stores
+*.pdb
+
+# Publish outputs
+publish/
+**/PublishProfiles/*.pubxml
+**/PublishProfiles/*.azurePubxml
+*.pubxml.user
+
+# User-specific config
+*.userprefs
+
+# Image cache
+**/obj/**/g.resources
+**/obj/**/*.cache
+
+# WPF generated files
+*.g.cs
+*.g.i.cs
+*.baml
+
+# YAML templates: keep tracked (do NOT ignore)
+# RaceConfig.GUI/Templates/**/*.yaml
+
+# Optional: Rider/VS caches in solution dir
+.sln.cache
+
+# Optional: local tooling
+.env
+*.local.json

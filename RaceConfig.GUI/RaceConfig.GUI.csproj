@@ -1,0 +1,433 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\A Hat in Time.yaml" />
+    <None Remove="Templates\A Link to the Past.yaml" />
+    <None Remove="Templates\A Short Hike.yaml" />
+    <None Remove="Templates\Adventure.yaml" />
+    <None Remove="Templates\APBingo.yaml" />
+    <None Remove="Templates\Aquaria.yaml" />
+    <None Remove="Templates\Banjo-Tooie.yaml" />
+    <None Remove="Templates\Blasphemous.yaml" />
+    <None Remove="Templates\Bomb Rush Cyberfunk.yaml" />
+    <None Remove="Templates\Bumper Stickers.yaml" />
+    <None Remove="Templates\Castlevania - Circle of the Moon.yaml" />
+    <None Remove="Templates\Castlevania 64.yaml" />
+    <None Remove="Templates\Celeste %28Open World%29.yaml" />
+    <None Remove="Templates\Celeste 64.yaml" />
+    <None Remove="Templates\ChecksFinder.yaml" />
+    <None Remove="Templates\Choo-Choo Charles.yaml" />
+    <None Remove="Templates\Civilization VI.yaml" />
+    <None Remove="Templates\Clique.yaml" />
+    <None Remove="Templates\Dark Souls III.yaml" />
+    <None Remove="Templates\Dark Souls Remastered.yaml" />
+    <None Remove="Templates\DLCQuest.yaml" />
+    <None Remove="Templates\Donkey Kong Country 3.yaml" />
+    <None Remove="Templates\DOOM 1993.yaml" />
+    <None Remove="Templates\DOOM II.yaml" />
+    <None Remove="Templates\Factorio.yaml" />
+    <None Remove="Templates\Faxanadu.yaml" />
+    <None Remove="Templates\Final Fantasy Mystic Quest.yaml" />
+    <None Remove="Templates\Final Fantasy.yaml" />
+    <None Remove="Templates\Hades.yaml" />
+    <None Remove="Templates\Heretic.yaml" />
+    <None Remove="Templates\Hollow Knight.yaml" />
+    <None Remove="Templates\Hylics 2.yaml" />
+    <None Remove="Templates\Inscryption.yaml" />
+    <None Remove="Templates\Jak and Daxter The Precursor Legacy.yaml" />
+    <None Remove="Templates\Kingdom Hearts 2.yaml" />
+    <None Remove="Templates\Kingdom Hearts.yaml" />
+    <None Remove="Templates\Kirby%27s Dream Land 3.yaml" />
+    <None Remove="Templates\Landstalker - The Treasures of King Nole.yaml" />
+    <None Remove="Templates\Lingo.yaml" />
+    <None Remove="Templates\Links Awakening DX.yaml" />
+    <None Remove="Templates\Lufia II Ancient Cave.yaml" />
+    <None Remove="Templates\Mario &amp; Luigi Superstar Saga.yaml" />
+    <None Remove="Templates\Mega Man 2.yaml" />
+    <None Remove="Templates\Mega Man X.yaml" />
+    <None Remove="Templates\Mega Man X2.yaml" />
+    <None Remove="Templates\Mega Man X3.yaml" />
+    <None Remove="Templates\MegaMan Battle Network 3.yaml" />
+    <None Remove="Templates\Meritous.yaml" />
+    <None Remove="Templates\meta.yaml" />
+    <None Remove="Templates\Metroid Zero Mission.yaml" />
+    <None Remove="Templates\Minecraft.yaml" />
+    <None Remove="Templates\Muse Dash.yaml" />
+    <None Remove="Templates\Noita.yaml" />
+    <None Remove="Templates\Ocarina of Time.yaml" />
+    <None Remove="Templates\Old School Runescape.yaml" />
+    <None Remove="Templates\Ori and the Blind Forest.yaml" />
+    <None Remove="Templates\Outer Wilds.yaml" />
+    <None Remove="Templates\Overcooked! 2.yaml" />
+    <None Remove="Templates\Paint.yaml" />
+    <None Remove="Templates\Pokemon Crystal.yaml" />
+    <None Remove="Templates\Pokemon Emerald.yaml" />
+    <None Remove="Templates\Pokemon Red and Blue.yaml" />
+    <None Remove="Templates\Prodigal.yaml" />
+    <None Remove="Templates\Psychonauts.yaml" />
+    <None Remove="Templates\Raft.yaml" />
+    <None Remove="Templates\Risk of Rain 2.yaml" />
+    <None Remove="Templates\Rogue Legacy.yaml" />
+    <None Remove="Templates\Saving Princess.yaml" />
+    <None Remove="Templates\Secret of Evermore.yaml" />
+    <None Remove="Templates\shapez.yaml" />
+    <None Remove="Templates\Shivers.yaml" />
+    <None Remove="Templates\Slay the Spire.yaml" />
+    <None Remove="Templates\SMZ3.yaml" />
+    <None Remove="Templates\Sonic Adventure 2 Battle.yaml" />
+    <None Remove="Templates\Starcraft 2.yaml" />
+    <None Remove="Templates\Stardew Valley.yaml" />
+    <None Remove="Templates\Subnautica.yaml" />
+    <None Remove="Templates\Sudoku.yaml" />
+    <None Remove="Templates\Super Adventure Island 2.yaml" />
+    <None Remove="Templates\Super Mario 64.yaml" />
+    <None Remove="Templates\Super Mario Land 2.yaml" />
+    <None Remove="Templates\Super Mario World.yaml" />
+    <None Remove="Templates\Super Metroid Map Rando.yaml" />
+    <None Remove="Templates\Super Metroid.yaml" />
+    <None Remove="Templates\Symphony of the Night.yaml" />
+    <None Remove="Templates\Terraria.yaml" />
+    <None Remove="Templates\The Legend of Zelda - Oracle of Seasons.yaml" />
+    <None Remove="Templates\The Legend of Zelda.yaml" />
+    <None Remove="Templates\The Messenger.yaml" />
+    <None Remove="Templates\The Wind Waker.yaml" />
+    <None Remove="Templates\The Witness.yaml" />
+    <None Remove="Templates\Timespinner.yaml" />
+    <None Remove="Templates\TUNIC.yaml" />
+    <None Remove="Templates\Undertale.yaml" />
+    <None Remove="Templates\VVVVVV.yaml" />
+    <None Remove="Templates\Wargroove.yaml" />
+    <None Remove="Templates\Yacht Dice.yaml" />
+    <None Remove="Templates\Yooka-Laylee.yaml" />
+    <None Remove="Templates\Yoshi%27s Island.yaml" />
+    <None Remove="Templates\Yu-Gi-Oh! 2006.yaml" />
+    <None Remove="Templates\Zillion.yaml" />
+    <None Remove="Templates\Zork Grand Inquisitor.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\A Hat in Time.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\A Link to the Past.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\A Short Hike.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Adventure.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\APBingo.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Aquaria.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Banjo-Tooie.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Blasphemous.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Bomb Rush Cyberfunk.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Bumper Stickers.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Castlevania - Circle of the Moon.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Castlevania 64.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Celeste (Open World).yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Celeste 64.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\ChecksFinder.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Choo-Choo Charles.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Civilization VI.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Clique.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Dark Souls III.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Dark Souls Remastered.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\DLCQuest.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Donkey Kong Country 3.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\DOOM 1993.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\DOOM II.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Factorio.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Faxanadu.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Final Fantasy Mystic Quest.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Final Fantasy.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Hades.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Heretic.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Hollow Knight.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Hylics 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Inscryption.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Jak and Daxter The Precursor Legacy.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Kingdom Hearts 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Kingdom Hearts.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Kirby's Dream Land 3.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Landstalker - The Treasures of King Nole.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Lingo.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Links Awakening DX.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Lufia II Ancient Cave.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Mario &amp; Luigi Superstar Saga.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Mega Man 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Mega Man X.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Mega Man X2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Mega Man X3.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\MegaMan Battle Network 3.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Meritous.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\meta.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Metroid Zero Mission.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Minecraft.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Muse Dash.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Noita.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Ocarina of Time.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Old School Runescape.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Ori and the Blind Forest.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Outer Wilds.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Overcooked! 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Paint.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Pokemon Crystal.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Pokemon Emerald.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Pokemon Red and Blue.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Prodigal.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Psychonauts.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Raft.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Risk of Rain 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Rogue Legacy.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Saving Princess.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Secret of Evermore.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\shapez.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Shivers.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Slay the Spire.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\SMZ3.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Sonic Adventure 2 Battle.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Starcraft 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Stardew Valley.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Subnautica.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Sudoku.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Super Adventure Island 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Super Mario 64.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Super Mario Land 2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Super Mario World.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Super Metroid Map Rando.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Super Metroid.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Symphony of the Night.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Terraria.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\The Legend of Zelda - Oracle of Seasons.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\The Legend of Zelda.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\The Messenger.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\The Wind Waker.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\The Witness.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Timespinner.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\TUNIC.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Undertale.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\VVVVVV.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Wargroove.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Yacht Dice.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Yooka-Laylee.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Yoshi's Island.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Yu-Gi-Oh! 2006.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Zillion.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Zork Grand Inquisitor.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RaceConfig.Core\RaceConfig.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -30,7 +30,7 @@ public static class TemplateParser
             requiredVersion = GetScalar(reqMap, "version");
         }
 
-        // game block (e.g., "The Witness:")
+        // game block
         var options = new List<RandomizerOption>();
         if (root.Children.TryGetValue(new YamlScalarNode(gameName), out var gameBlock) && gameBlock is YamlMappingNode gameMap)
         {
@@ -41,6 +41,7 @@ public static class TemplateParser
 
                 // Skip comment-only sections; only process mappings/scalars/seq
                 switch (node)
+
                 {
                     case YamlMappingNode map:
                         options.Add(ClassifyMappingOption(gameName, key, map));

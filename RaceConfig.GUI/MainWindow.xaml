@@ -77,10 +77,10 @@
         <!-- Template selection per OptionType -->
         <Style x:Key="OptionContainerStyle" TargetType="ContentPresenter">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Type}" Value="BooleanWeighted">
+                <DataTrigger Binding="{Binding Type}" Value="Bool">
                     <Setter Property="ContentTemplate" Value="{StaticResource BooleanTemplate}"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Type}" Value="NumericWeighted">
+                <DataTrigger Binding="{Binding Type}" Value="Numeric">
                     <Setter Property="ContentTemplate" Value="{StaticResource NumericTemplate}"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Type}" Value="List">

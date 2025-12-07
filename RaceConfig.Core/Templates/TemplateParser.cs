@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 
 namespace RaceConfig.Core.Templates;
@@ -49,7 +50,7 @@ public static class TemplateParser
                     case YamlMappingNode map:
                         if (key == "progression_balancing")
                             Console.WriteLine("");
-                        options.Add(ClassifyMappingOption(gameName, key, map));
+                        options.Add(ClassifyMappingOption(gameName, key, map, raw));
                         break;
                     case YamlSequenceNode seq:
                         options.Add(new RandomizerOption
@@ -67,7 +68,7 @@ public static class TemplateParser
                         {
                             KeyPath = $"{gameName}.{key}",
                             DisplayName = key,
-                            Type = OptionType.PassThrough,
+                            Type = OptionType.Scalar,
                             SelectedValue = scalar.Value
                         });
                         break;
@@ -86,11 +87,10 @@ public static class TemplateParser
         };
     }
 
-    private static RandomizerOption ClassifyMappingOption(string gameName, string key, YamlMappingNode map)
+    private static RandomizerOption ClassifyMappingOption(string gameName, string key, YamlMappingNode map, string rawYaml)
     {
         var keys = map.Children.Keys.OfType<YamlScalarNode>().Select(k => k.Value ?? string.Empty).ToList();
 
-        // Empty map: treat as dictionary with no entries
         if (keys.Count == 0)
         {
             return new RandomizerOption
@@ -98,8 +98,8 @@ public static class TemplateParser
                 KeyPath = $"{gameName}.{key}",
                 DisplayName = key,
                 Type = OptionType.Dictionary,
-                DefaultDictionary = new Dictionary<string, string>(),
-                SelectedDictionary = new Dictionary<string, string>()
+                DefaultDictionary = new(),
+                SelectedDictionary = new()
             };
         }
 
@@ -111,14 +111,13 @@ public static class TemplateParser
         {
             var keyNode = new YamlScalarNode(k);
             var valNode = map.Children[keyNode];
-
-            // Attempt to parse weight as int; default to 0 if not an int
             var weight = TryParseInt(valNode) ?? 0;
 
             if (int.TryParse(k, out var num))
             {
                 numericKeys.Add(num);
-                weights[k] = weight;
+                // We do not add numeric entries into Weights for GUI choices; slider handles numeric selection.
+                weights[k] = weight; // keep for generator to zero-out later
             }
             else if (IsSpecialRandomKey(k))
             {
@@ -126,30 +125,33 @@ public static class TemplateParser
             }
             else
             {
+                // non-numeric, non-special enum keys (rare) – treat as enum if there are no numeric keys
                 weights[k] = weight;
             }
         }
 
-        // Numeric option: at least one numeric key present
         if (numericKeys.Count > 0)
         {
-            var defaultNum = numericKeys.Count > 0 ? numericKeys[0] : (int?)null;
+            // Prefer min/max from comments; fallback to observed numeric keys
+            var (commentMin, commentMax) = ExtractNumericRangeFromComments(rawYaml, gameName, key);
+            var min = commentMin ?? (numericKeys.Count > 0 ? numericKeys.Min() : (int?)null);
+            var max = commentMax ?? (numericKeys.Count > 0 ? numericKeys.Max() : (int?)null);
+            var defaultNum = numericKeys.FirstOrDefault();
 
             return new RandomizerOption
             {
                 KeyPath = $"{gameName}.{key}",
                 DisplayName = key,
-                Type = OptionType.NumericWeighted,
-                Weights = weights,
-                Specials = specials,
-                Min = numericKeys.Min(),
-                Max = numericKeys.Max(),
+                Type = OptionType.Numeric,
+                Weights = weights,   // includes numeric keys too (for export zeroing)
+                Specials = specials, // random/random-low/high/etc.
+                Min = min,
+                Max = max,
                 DefaultNumeric = defaultNum,
                 SelectedNumber = defaultNum
             };
         }
 
-        // Boolean weighted if keys contain both true/false (as strings)
         if (IsBooleanWeights(keys))
         {
             var defaultBool = weights.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
@@ -157,23 +159,76 @@ public static class TemplateParser
             {
                 KeyPath = $"{gameName}.{key}",
                 DisplayName = key,
-                Type = OptionType.BooleanWeighted,
+                Type = OptionType.Bool,
                 Weights = weights,
                 SelectedValue = string.IsNullOrEmpty(defaultBool) ? null : defaultBool
             };
         }
 
-        // Fallback: enum weighted
         var defaultEnum = weights.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
-
         return new RandomizerOption
         {
             KeyPath = $"{gameName}.{key}",
             DisplayName = key,
-            Type = OptionType.EnumWeighted,
-            Weights = weights,
+            Type = OptionType.SelectList,
+            Weights = specials.Count > 0 ? specials : weights,
             SelectedValue = string.IsNullOrEmpty(defaultEnum) ? keys.FirstOrDefault() : defaultEnum
         };
+    }
+
+    // Heuristic: search raw text near the option for min/max lines
+    private static (int? min, int? max) ExtractNumericRangeFromComments(string rawYaml, string gameName, string optionKey)
+    {
+        // Find the section header line: "<gameName>:" then later the "<optionKey>:" block
+        // Use a forgiving regex to extract nearby "Minimum value is X" and "Maximum value is Y"
+        // Also handle variants: "Minimum value: X", "Minimum: X", "Min: X", "Max: X", etc.
+        var rangePatterns = new[]
+        {
+            @"Minimum\s+value\s+is\s+(?<num>\d+)",
+            @"Maximum\s+value\s+is\s+(?<num>\d+)",
+            @"Minimum\s*:\s*(?<num>\d+)",
+            @"Maximum\s*:\s*(?<num>\d+)",
+            @"Min(?:imum)?\s*value?\s*:\s*(?<num>\d+)",
+            @"Max(?:imum)?\s*value?\s*:\s*(?<num>\d+)"
+        };
+
+        var sectionRegex = new Regex($@"^{Regex.Escape(gameName)}\s*:\s*$", RegexOptions.Multiline);
+        var optionRegex = new Regex($@"^\s*{Regex.Escape(optionKey)}\s*:\s*$", RegexOptions.Multiline);
+
+        var sectionMatch = sectionRegex.Match(rawYaml);
+        if (!sectionMatch.Success) return (null, null);
+
+        var startIndex = sectionMatch.Index;
+        var endIndex = rawYaml.IndexOf('\n', startIndex);
+        // Narrow search to after the game section start
+        var searchText = rawYaml.Substring(startIndex);
+
+        var optMatch = optionRegex.Match(searchText);
+        if (!optMatch.Success) return (null, null);
+
+        // Search within some window following the option header (e.g., next 40 lines)
+        var windowStart = optMatch.Index;
+        var windowText = searchText.Substring(windowStart);
+        var lines = windowText.Split('\n').Take(60).ToArray();
+        var window = string.Join("\n", lines);
+
+        int? min = null, max = null;
+        foreach (var pat in rangePatterns)
+        {
+            var rx = new Regex(pat, RegexOptions.IgnoreCase);
+            foreach (Match m in rx.Matches(window))
+            {
+                if (m.Success && int.TryParse(m.Groups["num"].Value, out var n))
+                {
+                    if (pat.StartsWith("Minimum", StringComparison.OrdinalIgnoreCase) || pat.StartsWith("Min", StringComparison.OrdinalIgnoreCase))
+                        min = min ?? n;
+                    else
+                        max = max ?? n;
+                }
+            }
+        }
+
+        return (min, max);
     }
 
     private static int? TryParseInt(YamlNode node)

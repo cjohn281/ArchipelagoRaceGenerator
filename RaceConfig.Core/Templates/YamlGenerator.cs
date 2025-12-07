@@ -33,38 +33,51 @@ public static class YamlGenerator
 
                 switch (opt.Type)
                 {
-                    case OptionType.EnumWeighted:
-                    case OptionType.BooleanWeighted:
-                        // Set selected value’s weight high, others low/zero
+                    case OptionType.SelectList:
+                    case OptionType.Bool:
+                    {
                         var currentMap = (YamlMappingNode)gameMap.Children[new YamlScalarNode(optKey)];
                         foreach (var entry in currentMap.Children.ToList())
                         {
                             var key = ((YamlScalarNode)entry.Key).Value ?? string.Empty;
-                            var newWeight = (opt.SelectedValue == key) ? 50 : 0; // simple rule; can be customized
+                            var newWeight = (opt.SelectedValue == key) ? 50 : 0;
                             currentMap.Children[entry.Key] = new YamlScalarNode(newWeight.ToString());
                         }
                         break;
+                    }
 
-                    case OptionType.NumericWeighted:
+                    case OptionType.Numeric:
+                    {
                         var numMap = (YamlMappingNode)gameMap.Children[new YamlScalarNode(optKey)];
+                        var matchedSelected = false;
+
+                        // Zero out all existing entries, set selected numeric to 50 if present
                         foreach (var entry in numMap.Children.ToList())
                         {
-                            var key = ((YamlScalarNode)entry.Key).Value ?? string.Empty;
-                            var newWeight = 0;
+                            var keyText = ((YamlScalarNode)entry.Key).Value ?? string.Empty;
 
-                            if (int.TryParse(key, out var n))
+                            if (int.TryParse(keyText, out var existingNum))
                             {
-                                newWeight = (opt.SelectedNumber.HasValue && opt.SelectedNumber.Value == n) ? 50 : 0;
+                                var newWeight = (opt.SelectedNumber.HasValue && opt.SelectedNumber.Value == existingNum) ? 50 : 0;
+                                if (newWeight == 50) matchedSelected = true;
+                                numMap.Children[entry.Key] = new YamlScalarNode(newWeight.ToString());
                             }
-                            else if (opt.UseRandom && opt.Specials?.ContainsKey(key) == true)
+                            else
                             {
-                                // prefer "random" keys when UseRandom is set
-                                newWeight = 50;
+                                // Non-numeric (random/normal/etc.) always forced to 0
+                                numMap.Children[entry.Key] = new YamlScalarNode("0");
                             }
-
-                            numMap.Children[entry.Key] = new YamlScalarNode(newWeight.ToString());
                         }
+
+                        // If the selected numeric value doesn't exist in the mapping, add it with weight 50
+                        if (opt.SelectedNumber.HasValue && !matchedSelected)
+                        {
+                            var selectedKey = new YamlScalarNode(opt.SelectedNumber.Value.ToString());
+                            numMap.Children[selectedKey] = new YamlScalarNode("50");
+                        }
+
                         break;
+                    }
 
                     case OptionType.List:
                         gameMap.Children[new YamlScalarNode(optKey)] =
@@ -72,6 +85,7 @@ public static class YamlGenerator
                         break;
 
                     case OptionType.Dictionary:
+                    {
                         var dict = new YamlMappingNode();
                         foreach (var kv in (opt.SelectedDictionary ?? opt.DefaultDictionary ?? new()))
                         {
@@ -79,8 +93,9 @@ public static class YamlGenerator
                         }
                         gameMap.Children[new YamlScalarNode(optKey)] = dict;
                         break;
+                    }
 
-                    case OptionType.PassThrough:
+                    case OptionType.Scalar:
                         gameMap.Children[new YamlScalarNode(optKey)] =
                             new YamlScalarNode(opt.SelectedValue ?? "");
                         break;

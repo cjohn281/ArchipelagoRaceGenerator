@@ -6,7 +6,26 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+
+    <!-- Versioning -->
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Version>0.1.0-alpha</Version>
+    <!-- shown by AboutWindow via Assembly.GetName().Version -->
+    <InformationalVersion>0.1.0-alpha</InformationalVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RaceConfig.Core\RaceConfig.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Templates\" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Templates\A Hat in Time.yaml" />

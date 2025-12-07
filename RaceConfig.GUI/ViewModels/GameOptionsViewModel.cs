@@ -10,9 +10,15 @@ using RaceConfig.Core.Templates;
 
 namespace RaceConfig.GUI.ViewModels;
 
+public sealed class TemplateItem
+{
+    public required string FullPath { get; init; }
+    public required string Name { get; init; }
+}
+
 public class GameOptionsViewModel : INotifyPropertyChanged
 {
-    public ObservableCollection<string> TemplateFiles { get; private set; } = new();
+    public ObservableCollection<TemplateItem> TemplateFiles { get; private set; } = new();
     private string? _selectedTemplateFile;
     public string? SelectedTemplateFile
     {
@@ -63,9 +69,12 @@ public class GameOptionsViewModel : INotifyPropertyChanged
             MessageBox.Show("Templates folder not found next to the app.", "Template Picker");
             return;
         }
-        TemplateFiles = new ObservableCollection<string>(Directory.GetFiles(dir, "*.yaml"));
+        var files = Directory.GetFiles(dir, "*.yaml", SearchOption.TopDirectoryOnly);
+        TemplateFiles = new ObservableCollection<TemplateItem>(
+            files.Select(f => new TemplateItem { FullPath = f, Name = Path.GetFileName(f) }));
         OnPropertyChanged(nameof(TemplateFiles));
-        SelectedTemplateFile = TemplateFiles.FirstOrDefault();
+
+        SelectedTemplateFile = TemplateFiles.FirstOrDefault()?.FullPath;
     }
 
     private void LoadTemplate(string path)

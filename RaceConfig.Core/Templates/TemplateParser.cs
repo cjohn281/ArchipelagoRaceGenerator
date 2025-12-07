@@ -39,12 +39,18 @@ public static class TemplateParser
                 var key = ((YamlScalarNode)kvp.Key).Value ?? string.Empty;
                 var node = kvp.Value;
 
+                // Skip node if it's empty
+                if (IsEmptyNode(node))
+                    continue;
+
+
                 switch (node)
                 {
                     case YamlMappingNode map:
+                        if (key == "progression_balancing")
+                            Console.WriteLine("");
                         options.Add(ClassifyMappingOption(gameName, key, map));
                         break;
-
                     case YamlSequenceNode seq:
                         options.Add(new RandomizerOption
                         {
@@ -159,6 +165,7 @@ public static class TemplateParser
 
         // Fallback: enum weighted
         var defaultEnum = weights.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
+
         return new RandomizerOption
         {
             KeyPath = $"{gameName}.{key}",
@@ -205,5 +212,26 @@ public static class TemplateParser
         return map.Children.TryGetValue(new YamlScalarNode(key), out var node) && node is YamlScalarNode s
             ? s.Value
             : null;
+    }
+    private static bool IsEmptyNode(YamlNode node)
+    {
+        switch (node)
+        {
+            case YamlMappingNode map:
+                // map with no entries
+                return map.Children == null || map.Children.Count == 0;
+
+            case YamlSequenceNode seq:
+                // sequence with no items
+                return seq.Children == null || seq.Children.Count == 0;
+
+            case YamlScalarNode scalar:
+                // null or whitespace scalar
+                var val = scalar.Value;
+                return string.IsNullOrWhiteSpace(val);
+
+            default:
+                return false;
+        }
     }
 }

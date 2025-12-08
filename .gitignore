@@ -36,6 +36,9 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
+# Testing
+RaceConfig.Tests/
+
 # Test results
 TestResults/
 *.trx

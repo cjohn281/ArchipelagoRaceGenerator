@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceConfig.GUI", "RaceConfi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceConfig.Core", "RaceConfig.Core\RaceConfig.Core.csproj", "{8B44D89A-0305-408D-A466-52E889B31D21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceConfig.Tests", "RaceConfig.Tests\RaceConfig.Tests.csproj", "{4800977B-7A0E-4865-A131-C5DEB51C7CFF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

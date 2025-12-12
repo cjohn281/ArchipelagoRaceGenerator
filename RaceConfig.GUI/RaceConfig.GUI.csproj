@@ -8,13 +8,34 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
 
-    <!-- Versioning -->
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <!-- This controls the exe name -->
+    <AssemblyName>ArchipelagoRaceGenerator</AssemblyName>
+
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <FileVersion>0.1.0</FileVersion>
     <Version>0.1.0-alpha</Version>
-    <!-- shown by AboutWindow via Assembly.GetName().Version -->
     <InformationalVersion>0.1.0-alpha</InformationalVersion>
+
+    <PublishDir>$(MSBuildProjectDirectory)\bin\Release\net8.0-windows\publish\</PublishDir>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
+
+  <!-- Move all non‑exe root files into /bin under the publish root -->
+  <Target Name="AfterPublish">
+    <ItemGroup>
+      <!-- Everything in the root of PublishDir except the main exe -->
+      <RootFiles Include="$(PublishDir)*.*"
+                 Exclude="$(PublishDir)$(AssemblyName).exe" />
+    </ItemGroup>
+
+    <MakeDir Directories="$(PublishDir)bin"
+             Condition="!Exists('$(PublishDir)bin')" />
+
+    <Move SourceFiles="@(RootFiles)"
+          DestinationFolder="$(PublishDir)bin" />
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
@@ -29,11 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\RaceConfig.Core\RaceConfig.Core.csproj" />
+    <Content Remove="Templates\**\*.*" />
+    <None   Remove="Templates\**\*.*" />
+    <Content Remove="AppConfig.json" />
+    <None   Remove="AppConfig.json" />
   </ItemGroup>
 
 </Project>

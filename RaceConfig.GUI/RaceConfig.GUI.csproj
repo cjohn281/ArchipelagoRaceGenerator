@@ -22,6 +22,23 @@
     <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
 
+  <!-- After publish, rename exe to include Version -->
+  <Target Name="RenamePublishedExeWithVersion" AfterTargets="Publish">
+    <!-- Original and new paths -->
+    <PropertyGroup>
+      <OriginalExe>$(PublishDir)$(AssemblyName).exe</OriginalExe>
+      <VersionedExe>$(PublishDir)$(AssemblyName)-$(Version).exe</VersionedExe>
+    </PropertyGroup>
+
+    <!-- If the versioned exe already exists, delete it -->
+    <Delete Files="$(VersionedExe)" Condition="Exists('$(VersionedExe)')" />
+
+    <!-- Rename (move) the published exe -->
+    <Move SourceFiles="$(OriginalExe)"
+          DestinationFiles="$(VersionedExe)"
+          Condition="Exists('$(OriginalExe)')" />
+  </Target>
+
   <ItemGroup>
     <!-- Do not publish PDBs -->
     <DebugSymbolsFile Remove="**\*.pdb" />

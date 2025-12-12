@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,18 @@ namespace RaceConfig.GUI
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void OnExitClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void OnAboutClick(object sender, RoutedEventArgs e)
+        {
+            var about = new AboutWindow();
+            about.Owner = this;
+            about.ShowDialog();
         }
     }
 }

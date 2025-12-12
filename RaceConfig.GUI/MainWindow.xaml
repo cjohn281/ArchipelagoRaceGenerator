@@ -3,10 +3,172 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RaceConfig.GUI"
+        xmlns:vm="clr-namespace:RaceConfig.GUI.ViewModels"
+        xmlns:conv="clr-namespace:RaceConfig.GUI.Converters"
+        xmlns:core="clr-namespace:RaceConfig.Core.Templates;assembly=RaceConfig.Core"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Archipelago Race Generator" Height="540" Width="920">
+    <Window.DataContext>
+        <vm:GameOptionsViewModel />
+    </Window.DataContext>
 
-    </Grid>
+    <Window.Resources>
+        <conv:BoolStringConverter x:Key="BoolStringConverter"/>
+
+        <!-- Right-column templates (controls only) -->
+        <!-- SelectList & Scalar (string selection) -->
+        <DataTemplate DataType="{x:Type core:RandomizerOption}">
+            <ComboBox Width="380"
+                      ItemsSource="{Binding Weights.Keys}"
+                      SelectedItem="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"/>
+        </DataTemplate>
+
+        <!-- Bool -> CheckBox -->
+        <DataTemplate x:Key="BooleanTemplate" DataType="{x:Type core:RandomizerOption}">
+            <CheckBox Content="Enabled"
+                      IsChecked="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolStringConverter}}"/>
+        </DataTemplate>
+
+        <!-- Numeric -> Slider -->
+        <DataTemplate x:Key="NumericTemplate" DataType="{x:Type core:RandomizerOption}">
+            <StackPanel Orientation="Horizontal">
+                <Slider Width="360"
+                        Minimum="{Binding Min}"
+                        Maximum="{Binding Max}"
+                        Value="{Binding SelectedNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsSnapToTickEnabled="True"/>
+                <TextBlock Text="{Binding SelectedNumber}" Margin="12,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <!-- List -->
+        <DataTemplate x:Key="ListTemplate" DataType="{x:Type core:RandomizerOption}">
+            <ItemsControl ItemsSource="{Binding SelectedList}"/>
+        </DataTemplate>
+
+        <!-- Dictionary -->
+        <DataTemplate x:Key="DictTemplate" DataType="{x:Type core:RandomizerOption}">
+            <ItemsControl ItemsSource="{Binding SelectedDictionary}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Key}" Width="180"/>
+                            <TextBlock Text="{Binding Value}" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+
+        <!-- Select the right-column control based on Type -->
+        <Style x:Key="OptionControlPresenterStyle" TargetType="ContentPresenter">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Type}" Value="Bool">
+                    <Setter Property="ContentTemplate" Value="{StaticResource BooleanTemplate}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Numeric">
+                    <Setter Property="ContentTemplate" Value="{StaticResource NumericTemplate}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="List">
+                    <Setter Property="ContentTemplate" Value="{StaticResource ListTemplate}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Dictionary">
+                    <Setter Property="ContentTemplate" Value="{StaticResource DictTemplate}"/>
+                </DataTrigger>
+                <!-- SelectList & Scalar fall back to the default DataTemplate -->
+            </Style.Triggers>
+        </Style>
+
+        <!-- Item container: two-column Grid with aligned label/control -->
+        <DataTemplate x:Key="OptionRowTemplate" DataType="{x:Type core:RandomizerOption}">
+            <Grid Margin="0,10,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="OptionLabel" Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding DisplayName}"
+                           VerticalAlignment="Center"
+                           Margin="0,0,12,0"/>
+
+                <ContentPresenter Grid.Column="1"
+                                  Content="{Binding}"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center"
+                                  Margin="0"
+                                  Style="{StaticResource OptionControlPresenterStyle}"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="E_xit" Click="OnExitClick"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="OnAboutClick"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid Margin="16" Grid.IsSharedSizeScope="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Path selector -->
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Path:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBox Width="520"
+                         Text="{Binding TemplatesPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Content="Browse..." Margin="8,0,0,0"
+                        Command="{Binding BrowseTemplatesPathCommand}"/>
+            </StackPanel>
+
+            <!-- Template picker -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
+                <TextBlock Text="Template:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox Width="560"
+                          ItemsSource="{Binding TemplateFiles}"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="FullPath"
+                          SelectedValue="{Binding SelectedTemplateFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <!-- Game + Player -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,24,0,10" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Template.GameName}" FontSize="16" FontWeight="Bold" Margin="0,0,16,0"/>
+                <TextBlock Text="Player:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBox Width="220" Text="{Binding PlayerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <!-- Dynamic options in two columns -->
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Options}" ItemTemplate="{StaticResource OptionRowTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <!-- Add extra vertical spacing between each option -->
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Margin" Value="0,6,0,6"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Export -->
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10,0,0">
+                <Button Content="Export YAML" Padding="12,6" Command="{Binding ExportCommand}"/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
 </Window>

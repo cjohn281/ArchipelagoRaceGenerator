@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -22,29 +22,20 @@
     <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
 
-  <!-- After publish, rename exe to include Version -->
-  <Target Name="RenamePublishedExeWithVersion" AfterTargets="Publish">
-    <!-- Original and new paths -->
-    <PropertyGroup>
-      <OriginalExe>$(PublishDir)$(AssemblyName).exe</OriginalExe>
-      <VersionedExe>$(PublishDir)$(AssemblyName)-$(Version).exe</VersionedExe>
-    </PropertyGroup>
+  <!-- Move all non‑exe root files into /bin under the publish root -->
+  <Target Name="AfterPublish">
+    <ItemGroup>
+      <!-- Everything in the root of PublishDir except the main exe -->
+      <RootFiles Include="$(PublishDir)*.*"
+                 Exclude="$(PublishDir)$(AssemblyName).exe" />
+    </ItemGroup>
 
-    <!-- If the versioned exe already exists, delete it -->
-    <Delete Files="$(VersionedExe)" Condition="Exists('$(VersionedExe)')" />
+    <MakeDir Directories="$(PublishDir)bin"
+             Condition="!Exists('$(PublishDir)bin')" />
 
-    <!-- Rename (move) the published exe -->
-    <Move SourceFiles="$(OriginalExe)"
-          DestinationFiles="$(VersionedExe)"
-          Condition="Exists('$(OriginalExe)')" />
+    <Move SourceFiles="@(RootFiles)"
+          DestinationFolder="$(PublishDir)bin" />
   </Target>
-
-  <ItemGroup>
-    <!-- Do not publish PDBs -->
-    <DebugSymbolsFile Remove="**\*.pdb" />
-    <None Remove="**\*.pdb" />
-    <Content Remove="**\*.pdb" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />

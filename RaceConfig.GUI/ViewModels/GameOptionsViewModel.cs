@@ -145,7 +145,7 @@ public class GameOptionsViewModel : INotifyPropertyChanged
         {
             var yaml = YamlGenerator.GeneratePlayerYaml(Template, PlayerName);
             File.WriteAllText(sfd.FileName, yaml);
-            System.Windows.MessageBox.Show($"Exported: {sfd.FileName}", "Export");
+            //System.Windows.MessageBox.Show($"Exported: {sfd.FileName}", "Export");
         }
     }
 

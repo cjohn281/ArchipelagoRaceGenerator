@@ -22,20 +22,12 @@
     <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
 
-  <!-- Move all non‑exe root files into /bin under the publish root -->
-  <Target Name="AfterPublish">
-    <ItemGroup>
-      <!-- Everything in the root of PublishDir except the main exe -->
-      <RootFiles Include="$(PublishDir)*.*"
-                 Exclude="$(PublishDir)$(AssemblyName).exe" />
-    </ItemGroup>
-
-    <MakeDir Directories="$(PublishDir)bin"
-             Condition="!Exists('$(PublishDir)bin')" />
-
-    <Move SourceFiles="@(RootFiles)"
-          DestinationFolder="$(PublishDir)bin" />
-  </Target>
+  <ItemGroup>
+    <!-- Do not publish PDBs -->
+    <DebugSymbolsFile Remove="**\*.pdb" />
+    <None Remove="**\*.pdb" />
+    <Content Remove="**\*.pdb" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />

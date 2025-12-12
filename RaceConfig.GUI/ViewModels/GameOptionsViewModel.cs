@@ -7,6 +7,8 @@ using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using RaceConfig.Core.Templates;
+using RaceConfig.GUI.Config;
+using WinForms = System.Windows.Forms;
 
 namespace RaceConfig.GUI.ViewModels;
 
@@ -18,6 +20,23 @@ public sealed class TemplateItem
 
 public class GameOptionsViewModel : INotifyPropertyChanged
 {
+    private readonly AppConfig _config = AppConfigStore.Load();
+
+    private string? _templatesPath;
+    public string? TemplatesPath
+    {
+        get => _templatesPath;
+        set
+        {
+            if (_templatesPath == value) return;
+            _templatesPath = value;
+            OnPropertyChanged();
+            _config.TemplatesPath = value;
+            AppConfigStore.Save(_config);
+            DiscoverTemplates();
+        }
+    }
+
     public ObservableCollection<TemplateItem> TemplateFiles { get; private set; } = new();
     private string? _selectedTemplateFile;
     public string? SelectedTemplateFile
@@ -38,8 +57,7 @@ public class GameOptionsViewModel : INotifyPropertyChanged
         set { _template = value; OnPropertyChanged(); OnPropertyChanged(nameof(Options)); }
     }
 
-    public ObservableCollection<RandomizerOption> Options
-        => new(Template?.Options ?? new());
+    public ObservableCollection<RandomizerOption> Options => new(Template?.Options ?? new());
 
     private string _playerName = "Runner01";
     public string PlayerName
@@ -49,48 +67,74 @@ public class GameOptionsViewModel : INotifyPropertyChanged
     }
 
     public IRelayCommand ExportCommand { get; }
+    public IRelayCommand BrowseTemplatesPathCommand { get; }
 
     public GameOptionsViewModel()
     {
         ExportCommand = new RelayCommand(ExportYaml);
-        DiscoverTemplates();
+        BrowseTemplatesPathCommand = new RelayCommand(BrowseTemplatesPath);
+
+        // Load last path or empty; DiscoverTemplates will no-op if path is invalid
+        TemplatesPath = !string.IsNullOrWhiteSpace(_config.TemplatesPath) ? _config.TemplatesPath : "";
+    }
+
+    private string ResolveDefaultTemplatesPath()
+    {
+        // Return empty to force user selection, or keep probing typical locations if desired
+        return string.IsNullOrWhiteSpace(_config.TemplatesPath) ? "" : _config.TemplatesPath;
+    }
+
+    private void BrowseTemplatesPath()
+    {
+        using var dlg = new WinForms.FolderBrowserDialog
+        {
+            Description = "Select folder containing YAML templates",
+            UseDescriptionForTitle = true,
+            ShowNewFolderButton = false,
+            SelectedPath = string.IsNullOrWhiteSpace(TemplatesPath) ? AppContext.BaseDirectory : TemplatesPath
+        };
+        if (dlg.ShowDialog() == WinForms.DialogResult.OK && Directory.Exists(dlg.SelectedPath))
+        {
+            TemplatesPath = dlg.SelectedPath;
+        }
     }
 
     private void DiscoverTemplates()
     {
-        var candidateDirs = new[]
+        try
         {
-            Path.Combine(AppContext.BaseDirectory, "Templates"),
-            Path.Combine(Directory.GetCurrentDirectory(), "Templates")
-        };
-        var dir = candidateDirs.FirstOrDefault(Directory.Exists);
-        if (dir is null)
-        {
-            MessageBox.Show("Templates folder not found next to the app.", "Template Picker");
-            return;
+            TemplateFiles.Clear();
+
+            if (string.IsNullOrWhiteSpace(TemplatesPath) || !Directory.Exists(TemplatesPath))
+            {
+                OnPropertyChanged(nameof(TemplateFiles));
+                return;
+            }
+
+            var files = Directory.GetFiles(TemplatesPath, "*.yaml", SearchOption.TopDirectoryOnly);
+            foreach (var f in files)
+                TemplateFiles.Add(new TemplateItem { FullPath = f, Name = Path.GetFileName(f) });
+
+            OnPropertyChanged(nameof(TemplateFiles));
+            SelectedTemplateFile = TemplateFiles.FirstOrDefault()?.FullPath;
         }
-        var files = Directory.GetFiles(dir, "*.yaml", SearchOption.TopDirectoryOnly);
-        TemplateFiles = new ObservableCollection<TemplateItem>(
-            files.Select(f => new TemplateItem { FullPath = f, Name = Path.GetFileName(f) }));
-        OnPropertyChanged(nameof(TemplateFiles));
-
-        SelectedTemplateFile = TemplateFiles.FirstOrDefault()?.FullPath;
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show($"Failed to load templates:\n{ex.Message}", "Template Picker");
+        }
     }
 
-    private void LoadTemplate(string path)
-    {
-        Template = TemplateParser.ParseFromFile(path);
-    }
+    private void LoadTemplate(string path) => Template = TemplateParser.ParseFromFile(path);
 
     private void ExportYaml()
     {
         if (Template is null)
         {
-            MessageBox.Show("Template is not loaded.", "Export");
+            System.Windows.MessageBox.Show("Template is not loaded.", "Export");
             return;
         }
 
-        var sfd = new SaveFileDialog
+        var sfd = new Microsoft.Win32.SaveFileDialog
         {
             Title = "Export Player YAML",
             Filter = "YAML Files (*.yaml)|*.yaml",
@@ -101,7 +145,7 @@ public class GameOptionsViewModel : INotifyPropertyChanged
         {
             var yaml = YamlGenerator.GeneratePlayerYaml(Template, PlayerName);
             File.WriteAllText(sfd.FileName, yaml);
-            MessageBox.Show($"Exported: {sfd.FileName}", "Export");
+            System.Windows.MessageBox.Show($"Exported: {sfd.FileName}", "Export");
         }
     }
 

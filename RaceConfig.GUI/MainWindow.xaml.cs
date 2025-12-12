@@ -24,7 +24,7 @@ namespace RaceConfig.GUI
 
         private void OnExitClick(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void OnAboutClick(object sender, RoutedEventArgs e)

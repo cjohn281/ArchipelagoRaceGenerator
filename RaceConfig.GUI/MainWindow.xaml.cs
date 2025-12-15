@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using RaceConfig.Core.Templates;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,26 +13,12 @@ using System.Windows.Shapes;
 
 namespace RaceConfig.GUI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
+            TemplateParser.ParseFromFile("C:\\ProgramData\\Archipelago\\Players\\Templates\\Outer Wilds.yaml");
             InitializeComponent();
-        }
-
-        private void OnExitClick(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Application.Current.Shutdown();
-        }
-
-        private void OnAboutClick(object sender, RoutedEventArgs e)
-        {
-            var about = new AboutWindow();
-            about.Owner = this;
-            about.ShowDialog();
         }
     }
 }

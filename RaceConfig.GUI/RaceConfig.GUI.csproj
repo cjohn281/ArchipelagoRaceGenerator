@@ -50,4 +50,10 @@
     <Content Include="icon.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="View\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 </Project>

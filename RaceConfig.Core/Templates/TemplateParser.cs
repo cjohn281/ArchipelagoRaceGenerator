@@ -11,17 +11,16 @@ public static class TemplateParser
 {
     public static GameTemplate ParseFromFile(string filePath)
     {
-        var raw = File.ReadAllText(filePath);
+        string raw = File.ReadAllText(filePath);
 
-        var yaml = new YamlStream();
-        using var reader = new StringReader(raw);
+        YamlStream yaml = new YamlStream();
+        using StringReader reader = new StringReader(raw);
         yaml.Load(reader);
 
-        var root = (YamlMappingNode)yaml.Documents[0].RootNode;
+        YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
 
-        var gameName = GetScalar(root, "game") ?? throw new InvalidOperationException("Missing 'game' in template.");
-        var description = GetScalar(root, "description");
-        var defaultPlayerName = GetScalar(root, "name");
+        string gameName = GetScalar(root, "game") ?? throw new InvalidOperationException("Template is missing 'game' field.");
+        string? description = GetScalar(root, "description");
 
         string? requiredVersion = null;
         if (root.Children.TryGetValue(new YamlScalarNode("requires"), out var reqNode) && reqNode is YamlMappingNode reqMap)
@@ -29,61 +28,66 @@ public static class TemplateParser
             requiredVersion = GetScalar(reqMap, "version");
         }
 
-        var options = new List<RandomizerOption>();
-        if (root.Children.TryGetValue(new YamlScalarNode(gameName), out var gameBlock) && gameBlock is YamlMappingNode gameMap)
+        List<RandomizerOption> options = new List<RandomizerOption>();
+        if (root.Children.TryGetValue(new YamlScalarNode(gameName), out var optionsBlock) && optionsBlock is YamlMappingNode optionsMap)
         {
-            foreach (var kvp in gameMap.Children)
+            foreach (var kvp in optionsMap.Children)
             {
-                var key = ((YamlScalarNode)kvp.Key).Value ?? string.Empty;
-                var node = kvp.Value;
+                string key = ((YamlScalarNode)kvp.Key).Value ?? string.Empty;
+                YamlNode node = kvp.Value;
 
-                if (IsEmptyNode(node))
-                    continue;
+                //if (IsEmptyNode(node))
+                //    continue;
 
                 switch (node)
                 {
                     case YamlMappingNode map:
                         options.Add(ClassifyMappingOption(raw, gameName, key, map));
                         break;
-
                     case YamlSequenceNode seq:
                         options.Add(new RandomizerOption
                         {
                             KeyPath = $"{gameName}.{key}",
                             DisplayName = key,
-                            Type = OptionType.List,
-                            DefaultList = seq.Children.OfType<YamlScalarNode>().Select(s => s.Value ?? string.Empty).ToList(),
-                            SelectedList = new List<string>()
+                            Type = OptionType.List
                         });
                         break;
-
-                    case YamlScalarNode scalar:
-                        options.Add(new RandomizerOption
-                        {
-                            KeyPath = $"{gameName}.{key}",
-                            DisplayName = key,
-                            Type = OptionType.Scalar,
-                            SelectedValue = scalar.Value
-                        });
-                        break;
+                        //case YamlScalarNode scalar:
+                        //    options.Add(new RandomizerOption());
+                        //    break;
                 }
             }
         }
 
-        return new GameTemplate
+        return new GameTemplate{options = options};
+    }
+
+    private static string? GetScalar(YamlMappingNode map, string key)
+    {
+        return map.Children.TryGetValue(new YamlScalarNode(key), out YamlNode? node) && node is YamlScalarNode s
+            ? s.Value
+            : null;
+    }
+
+    private static bool IsEmptyNode(YamlNode node)
+    {
+        switch (node)
         {
-            GameName = gameName,
-            Description = description,
-            RequiredVersion = requiredVersion,
-            RawYaml = raw,
-            Options = options,
-            DefaultPlayerName = defaultPlayerName
-        };
+            case YamlMappingNode map:
+                return map.Children == null || map.Children.Count == 0;
+            case YamlSequenceNode seq:
+                return seq.Children == null || seq.Children.Count == 0;
+            case YamlScalarNode scalar:
+                string? val = scalar.Value;
+                return string.IsNullOrWhiteSpace(val);
+            default:
+                return false;
+        }
     }
 
     private static RandomizerOption ClassifyMappingOption(string rawYaml, string gameName, string key, YamlMappingNode map)
     {
-        var keys = map.Children.Keys.OfType<YamlScalarNode>().Select(k => k.Value ?? string.Empty).ToList();
+        List<string> keys = map.Children.Keys.OfType<YamlScalarNode>().Select(k => k.Value ?? string.Empty).ToList();
 
         if (keys.Count == 0)
         {
@@ -91,93 +95,109 @@ public static class TemplateParser
             {
                 KeyPath = $"{gameName}.{key}",
                 DisplayName = key,
-                Type = OptionType.Dictionary,
-                DefaultDictionary = new Dictionary<string, string>(),
-                SelectedDictionary = new Dictionary<string, string>()
+                Type = OptionType.Dictionary
             };
         }
 
-        var numericKeys = new List<int>();
-        var specials = new Dictionary<string, int>();
-        var weights = new Dictionary<string, int>();
+        List<int> numericKeys = new List<int>();
+        List<string> stringKeys = new List<string>();
+        Dictionary<string, int> optionItems = new Dictionary<string, int>();
 
-        foreach (var k in keys)
+        foreach (string k in keys)
         {
-            var keyNode = new YamlScalarNode(k);
+            YamlScalarNode keyNode = new YamlScalarNode(k);
             var valNode = map.Children[keyNode];
-            var weight = TryParseInt(valNode) ?? 0;
+            int weight = TryParseInt(valNode) ?? 0;
 
-            if (int.TryParse(k, out var num))
-            {
-                numericKeys.Add(num);
-                weights[k] = weight; // keep numeric in weights for export zeroing
-            }
-            else if (IsSpecialRandomKey(k))
-            {
-                specials[k] = weight;
-                weights[k] = weight; // keep in weights, but GUI won’t show specials for numeric
-            }
+            if (int.TryParse(k, out int num))
+                numericKeys.Add(num); // keys that are numeric
             else
-            {
-                weights[k] = weight;
-            }
+                stringKeys.Add(k); // keys that are strings
+
+            optionItems[k] = weight;
         }
 
-        // Numeric (slider) if any numeric key exists, even with specials
-        if (numericKeys.Count > 0)
+        if (numericKeys.Count == 0)
         {
-            var (minC, maxC) = ExtractNumericRangeFromComments(rawYaml, gameName, key);
-            var min = minC ?? numericKeys.Min();
-            var max = maxC ?? numericKeys.Max();
+            int countWeightsGreaterThanZero = optionItems.Values.Count(v => v > 0);
+            
+            // Distribution
+            if (countWeightsGreaterThanZero > 1)
+            {
+                return new RandomizerOption
+                {
+                    KeyPath = $"{gameName}.{key}",
+                    DisplayName = key,
+                    Type = OptionType.Distribution,
+                    Weights = optionItems
+                };
+            }
+            // Bool
+            else if (IsBoolean(stringKeys) && optionItems.Count == 2)
+                return new RandomizerOption
+                {
+                    KeyPath = $"{gameName}.{key}",
+                    DisplayName = key,
+                    Type = OptionType.Bool,
+                    Weights = optionItems
+                };
+            
+            // SelectList
+            return new RandomizerOption
+            {
+                KeyPath = $"{gameName}.{key}",
+                DisplayName = key,
+                Type = OptionType.SelectList,
+                Weights = optionItems
+            };
+        }
+        
+        // SelectCustom
+        if (numericKeys.Count == 1)
+        {
+            var (rangeMin, rangeMax) = ExtractNumericRangeFromComments(rawYaml, gameName, key);
+            int min = rangeMin ?? 0;
+            int max = rangeMax ?? 100;
 
-            // Default to highest-weight numeric; fallback to min
-            var defaultNum = numericKeys
-                .OrderByDescending(n => weights.TryGetValue(n.ToString(), out var w) ? w : 0)
-                .FirstOrDefault();
-            if (defaultNum < min) defaultNum = min;
-            if (defaultNum > max) defaultNum = max;
+            int defaultNum = numericKeys[0];
 
             return new RandomizerOption
             {
                 KeyPath = $"{gameName}.{key}",
                 DisplayName = key,
-                Type = OptionType.Numeric,
-                Weights = weights,
-                Specials = specials,
+                Type = OptionType.SelectCustom,
+                Weights = optionItems,
                 Min = min,
                 Max = max,
-                DefaultNumeric = defaultNum,
-                SelectedNumber = defaultNum
+                DefaultNumeric = defaultNum
             };
         }
+            
 
-        // Bool (true/false)
-        if (IsBooleanWeights(keys))
-        {
-            var defaultBool = weights.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
-            return new RandomizerOption
-            {
-                KeyPath = $"{gameName}.{key}",
-                DisplayName = key,
-                Type = OptionType.Bool,
-                Weights = weights,
-                SelectedValue = string.IsNullOrEmpty(defaultBool) ? keys.FirstOrDefault() : defaultBool
-            };
-        }
-
-        // Select list (enum)
-        var defaultEnum = weights.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
-        return new RandomizerOption
-        {
-            KeyPath = $"{gameName}.{key}",
-            DisplayName = key,
-            Type = OptionType.SelectList,
-            Weights = weights,
-            SelectedValue = string.IsNullOrEmpty(defaultEnum) ? keys.FirstOrDefault() : defaultEnum
-        };
+        throw new InvalidOperationException($"Unable to parse {gameName}.{key}");
     }
 
-    // Robust comment range extraction near the option header
+    private static int? TryParseInt(YamlNode node)
+    {
+        if (node is YamlScalarNode s && int.TryParse(s.Value, out int i)) return i;
+        return null;
+    }
+
+    private static bool IsBoolean(List<string> keys)
+    {
+        static string Normalize(string s)
+        {
+            string t = s.Trim();
+            if ((t.StartsWith("'") && t.EndsWith("'")) || (t.StartsWith("\"") && t.EndsWith("\"")))
+            {
+                t = t.Substring(1, t.Length - 2);
+            }
+            return t.ToLowerInvariant();
+        }
+        HashSet<string> normalized = new HashSet<string>(keys.Select(Normalize));
+        return normalized.Contains("true") && normalized.Contains("false");
+    }
+
     private static (int? min, int? max) ExtractNumericRangeFromComments(string rawYaml, string gameName, string optionKey)
     {
         // Find the game section and option block, then scan next N lines for min/max phrases
@@ -224,55 +244,5 @@ public static class TemplateParser
         }
 
         return (min, max);
-    }
-
-    private static int? TryParseInt(YamlNode node)
-    {
-        if (node is YamlScalarNode s && int.TryParse(s.Value, out var i)) return i;
-        return null;
-    }
-
-    private static bool IsBooleanWeights(IEnumerable<string> keys)
-    {
-        static string Normalize(string s)
-        {
-            var t = s.Trim();
-            if ((t.StartsWith("'") && t.EndsWith("'")) || (t.StartsWith("\"") && t.EndsWith("\"")))
-            {
-                t = t.Substring(1, t.Length - 2);
-            }
-            return t.ToLowerInvariant();
-        }
-        var normalized = new HashSet<string>(keys.Select(Normalize));
-        return normalized.Contains("true") && normalized.Contains("false");
-    }
-
-    private static bool IsSpecialRandomKey(string k)
-    {
-        var v = k.Trim().ToLowerInvariant();
-        return v is "random" or "random-low" or "random_high" or "random-high" or "disabled" or "normal" or "extreme";
-    }
-
-    public static string? GetScalar(YamlMappingNode map, string key)
-    {
-        return map.Children.TryGetValue(new YamlScalarNode(key), out var node) && node is YamlScalarNode s
-            ? s.Value
-            : null;
-    }
-
-    private static bool IsEmptyNode(YamlNode node)
-    {
-        switch (node)
-        {
-            case YamlMappingNode map:
-                return map.Children == null || map.Children.Count == 0;
-            case YamlSequenceNode seq:
-                return seq.Children == null || seq.Children.Count == 0;
-            case YamlScalarNode scalar:
-                var val = scalar.Value;
-                return string.IsNullOrWhiteSpace(val);
-            default:
-                return false;
-        }
     }
 }

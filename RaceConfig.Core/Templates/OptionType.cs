@@ -4,7 +4,7 @@ public enum OptionType
     SelectList,
     SelectCustom,
     Bool,
-    Numeric,
+    Distribution,
     List,
     Dictionary,
     Scalar

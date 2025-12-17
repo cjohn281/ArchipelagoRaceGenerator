@@ -8,7 +8,6 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
 
-    <!-- This controls the exe name -->
     <AssemblyName>ArchipelagoRaceGenerator</AssemblyName>
 
     <AssemblyVersion>0.1.0</AssemblyVersion>
@@ -36,7 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Properties\**" />
     <Content Remove="Templates\**\*.*" />
+    <None Remove="Properties\**" />
     <None Remove="Templates\**\*.*" />
     <Content Remove="AppConfig.json" />
     <None Remove="AppConfig.json" />
@@ -44,6 +45,8 @@
     <DebugSymbolsFile Remove="**\*.pdb" />
     <None Remove="**\*.pdb" />
     <Content Remove="**\*.pdb" />
+    <EmbeddedResource Remove="Properties\**" />
+    <Page Remove="Properties\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,7 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="View\UserControls\" />
   </ItemGroup>
 

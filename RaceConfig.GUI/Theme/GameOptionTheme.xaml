@@ -17,12 +17,24 @@
                       SelectedItem="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             
             <StackPanel Orientation="Horizontal">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedValue}" Value="custom">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                
                 <Slider Width="360"
                         Minimum="{Binding Min}"
-
-                        Value="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        IsSnapToTickEnabled="True"/>
-                <TextBlock Text="{Binding SelectedValue}" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        Maximum="{Binding Max}"
+                        Value="{Binding DefaultNumeric, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsSnapToTickEnabled="True"
+                        Margin="0,5,0,0"/>
+                <TextBlock Text="{Binding DefaultNumeric}" Margin="12,0,0,0" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
     </DataTemplate>

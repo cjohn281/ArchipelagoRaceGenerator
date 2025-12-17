@@ -172,6 +172,15 @@ public static class TemplateParser
             int max = rangeMax ?? 100;
 
             int defaultNum = numericKeys[0];
+            
+            int valueOfNumericKey = optionItems[numericKeys[0].ToString()];
+            optionItems.Remove(numericKeys[0].ToString());
+            optionItems.Add("custom", valueOfNumericKey);
+
+            if(int.TryParse(defaultValue, out int dv))
+            {
+                defaultValue = "custom";
+            }
 
             return new RandomizerOption
             {

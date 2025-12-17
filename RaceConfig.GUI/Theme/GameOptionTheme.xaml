@@ -1,0 +1,70 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:core="clr-namespace:RaceConfig.Core.Templates;assembly=RaceConfig.Core">
+    
+    <!-- SelectList -->
+    <DataTemplate DataType="{x:Type core:RandomizerOption}">
+        <ComboBox Width="380"
+                  ItemsSource="{Binding Weights.Keys}"
+                  SelectedItem="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="SelectCustomTemplate" DataType="{x:Type core:RandomizerOption}">
+        <StackPanel Orientation="Vertical">
+            <ComboBox Width="380"
+                      ItemsSource="{Binding Weights.Keys}"
+                      SelectedItem="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            
+            <StackPanel Orientation="Horizontal">
+                <Slider Width="360"
+                        Minimum="{Binding Min}"
+
+                        Value="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsSnapToTickEnabled="True"/>
+                <TextBlock Text="{Binding SelectedValue}" Margin="12,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+    </DataTemplate>
+    
+    
+    <!-- Bool -->
+    <DataTemplate x:Key="BooleanTemplate" DataType="{x:Type core:RandomizerOption}">
+        <CheckBox Content="Enabled"
+                  IsChecked="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    </DataTemplate>
+
+
+    <Style x:Key="OptionControlPresenterStyle" TargetType="ContentPresenter">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Type}" Value="Bool">
+                <Setter Property="ContentTemplate" Value="{StaticResource BooleanTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="SelectCustom">
+                <Setter Property="ContentTemplate" Value="{StaticResource SelectCustomTemplate}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+
+    <DataTemplate x:Key="OptionRowTemplate" DataType="{x:Type core:RandomizerOption}">
+        <Grid Margin="0,10,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="OptionLabel" Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="{Binding DisplayName}"
+                       VerticalAlignment="Top"
+                       Margin="10,0,12,0"/>
+
+            <ContentPresenter Grid.Column="1"
+                              Content="{Binding}"
+                              HorizontalAlignment="Left"
+                              Margin="0"
+                              Style="{StaticResource OptionControlPresenterStyle}"
+                              VerticalAlignment="Center"/>
+        </Grid>
+    </DataTemplate>
+    
+</ResourceDictionary>

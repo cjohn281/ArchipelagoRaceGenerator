@@ -9,9 +9,13 @@ public sealed class RandomizerOption
     public required OptionType Type { get; init; }
 
     public Dictionary<string, int>? Weights { get; init; }
+    public string? SelectedValue { get; set; }
 
+    // SelectCustom properties
     public int? Min { get; init; }
     public int? Max { get; init; }
     public int? DefaultNumeric { get; init; }
+
+    
 }
 

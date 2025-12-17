@@ -1,4 +1,5 @@
 ﻿using RaceConfig.Core.Templates;
+using RaceConfig.GUI.ViewModels;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -17,8 +18,20 @@ namespace RaceConfig.GUI
     {
         public MainWindow()
         {
-            TemplateParser.ParseFromFile("C:\\ProgramData\\Archipelago\\Players\\Templates\\Outer Wilds.yaml");
+            //TemplateParser.ParseFromFile("C:\\ProgramData\\Archipelago\\Players\\Templates\\Outer Wilds.yaml");
             InitializeComponent();
+            MainWindowViewModel vm = new MainWindowViewModel();
+            DataContext = vm;
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 }

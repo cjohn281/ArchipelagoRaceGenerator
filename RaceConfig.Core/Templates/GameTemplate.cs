@@ -4,5 +4,16 @@ namespace RaceConfig.Core.Templates;
 
 public sealed class GameTemplate
 {
-    public List<RandomizerOption> options { get; init; }
+    public required string GameName { get; init; }
+    public string? Description { get; init; }
+    public string? RequiredVerison { get; init; }
+
+    // Raw YAML to preserve comments/structure for regeneration
+    public required string RawYaml { get; init; }
+
+    // Options discovered under the "GameName:" block
+    public required List<RandomizerOption> Options { get; init; }
+
+    // Top-level fields (name/description can be replaced per player)
+    public string? PlayerName { get; set; }
 }

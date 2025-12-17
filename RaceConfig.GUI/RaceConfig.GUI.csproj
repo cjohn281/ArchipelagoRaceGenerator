@@ -51,9 +51,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="View\" />
-    <Folder Include="ViewModel\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="View\UserControls\" />
   </ItemGroup>
 
 </Project>

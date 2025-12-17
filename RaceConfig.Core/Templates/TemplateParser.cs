@@ -52,14 +52,22 @@ public static class TemplateParser
                             Type = OptionType.List
                         });
                         break;
-                        //case YamlScalarNode scalar:
-                        //    options.Add(new RandomizerOption());
-                        //    break;
+                    //case YamlScalarNode scalar:
+                    //    options.Add(new RandomizerOption());
+                    //    break;
+                    default:
+                        throw new InvalidOperationException($"Unable to parse {gameName}.{key}");
                 }
             }
         }
 
-        return new GameTemplate{options = options};
+        return new GameTemplate{
+            GameName = gameName,
+            Description = description,
+            RequiredVerison = requiredVersion,
+            RawYaml = raw,
+            Options = options
+        };
     }
 
     private static string? GetScalar(YamlMappingNode map, string key)
@@ -117,6 +125,8 @@ public static class TemplateParser
             optionItems[k] = weight;
         }
 
+        string defaultValue = optionItems.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
+
         if (numericKeys.Count == 0)
         {
             int countWeightsGreaterThanZero = optionItems.Values.Count(v => v > 0);
@@ -139,7 +149,8 @@ public static class TemplateParser
                     KeyPath = $"{gameName}.{key}",
                     DisplayName = key,
                     Type = OptionType.Bool,
-                    Weights = optionItems
+                    Weights = optionItems,
+                    SelectedValue = string.IsNullOrEmpty(defaultValue) ? keys.FirstOrDefault() : defaultValue
                 };
             
             // SelectList
@@ -148,7 +159,8 @@ public static class TemplateParser
                 KeyPath = $"{gameName}.{key}",
                 DisplayName = key,
                 Type = OptionType.SelectList,
-                Weights = optionItems
+                Weights = optionItems,
+                SelectedValue = string.IsNullOrEmpty(defaultValue) ? keys.FirstOrDefault() : defaultValue
             };
         }
         
@@ -169,10 +181,23 @@ public static class TemplateParser
                 Weights = optionItems,
                 Min = min,
                 Max = max,
-                DefaultNumeric = defaultNum
+                DefaultNumeric = defaultNum,
+                SelectedValue = string.IsNullOrEmpty(defaultValue) ? keys.FirstOrDefault() : defaultValue
             };
         }
-            
+
+        if (numericKeys.Count > 1)
+        {
+            return new RandomizerOption
+            {
+                KeyPath = $"{gameName}.{key}",
+                DisplayName = key,
+                Type = OptionType.SelectList,
+                Weights = optionItems,
+                SelectedValue = string.IsNullOrEmpty(defaultValue) ? keys.FirstOrDefault() : defaultValue
+            };
+        }
+
 
         throw new InvalidOperationException($"Unable to parse {gameName}.{key}");
     }

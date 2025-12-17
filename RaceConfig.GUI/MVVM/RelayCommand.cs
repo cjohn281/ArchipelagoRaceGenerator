@@ -2,12 +2,12 @@
 
 namespace RaceConfig.GUI.MVVM
 {
-    internal class RelayCommand
+    internal class RelayCommand : ICommand
     {
         private Action<object> execute;
         private Func<object, bool> canExecute;
 
-        public event EventHandler? CanExecutechanged
+        public event EventHandler? CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
@@ -19,14 +19,14 @@ namespace RaceConfig.GUI.MVVM
             this.canExecute = canExecute;
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
-            return this.canExecute == null || this.canExecute(parameter);
+            return canExecute == null || canExecute(parameter);
         }
 
         public void Execute(object? parameter)
         {
-            this.execute(parameter);
+            execute(parameter);
         }
     }
 }

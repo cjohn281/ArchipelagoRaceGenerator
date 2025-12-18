@@ -16,6 +16,13 @@ public sealed class RandomizerOption
     public int? Max { get; init; }
     public int? DefaultNumeric { get; init; }
 
+    public List<ItemWeight>? DistributionWeights { get; init; }
+
+    public class ItemWeight
+    {
+        public required string Key { get; set; }
+        public required int Value { get; set; }
+    }
     
 }
 

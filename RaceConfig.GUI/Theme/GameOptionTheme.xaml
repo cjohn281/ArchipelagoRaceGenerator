@@ -28,7 +28,7 @@
                     </Style>
                 </StackPanel.Style>
                 
-                <Slider Width="360"
+                <Slider Width="340"
                         Minimum="{Binding Min}"
                         Maximum="{Binding Max}"
                         Value="{Binding DefaultNumeric, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -47,6 +47,42 @@
     </DataTemplate>
 
 
+    <!-- Distribution -->
+    <DataTemplate x:Key="DistributionTemplate" DataType="{x:Type core:RandomizerOption}">
+        <ItemsControl ItemsSource="{Binding DistributionWeights}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding Key}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,10,0,0"/>
+
+                        <TextBox Grid.Column="1"
+                                 Width="50"
+                                 Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 VerticalAlignment="Center"
+                                 Margin="0,10,0,0"
+                                 MaxLength="4"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        
+    </DataTemplate>
+
+
     <Style x:Key="OptionControlPresenterStyle" TargetType="ContentPresenter">
         <Style.Triggers>
             <DataTrigger Binding="{Binding Type}" Value="Bool">
@@ -55,9 +91,12 @@
             <DataTrigger Binding="{Binding Type}" Value="SelectCustom">
                 <Setter Property="ContentTemplate" Value="{StaticResource SelectCustomTemplate}"/>
             </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Distribution">
+                <Setter Property="ContentTemplate" Value="{StaticResource DistributionTemplate}"/>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
-    
+
 
     <DataTemplate x:Key="OptionRowTemplate" DataType="{x:Type core:RandomizerOption}">
         <Grid Margin="0,10,0,10">
@@ -68,7 +107,8 @@
 
             <TextBlock Grid.Column="0" Text="{Binding DisplayName}"
                        VerticalAlignment="Top"
-                       Margin="10,0,12,0"/>
+                       Margin="10,0,12,0"
+                       FontWeight="Bold"/>
 
             <ContentPresenter Grid.Column="1"
                               Content="{Binding}"

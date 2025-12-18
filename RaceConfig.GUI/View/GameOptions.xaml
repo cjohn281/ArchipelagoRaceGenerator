@@ -56,6 +56,8 @@
                     Height="25"
                     Margin="8,0,0,0"
                     VerticalAlignment="Center"
+                    Background="#925E78"
+                    Foreground="White"
                     Command="{Binding BrowseTemplatesPathCommand}"/>
 
             <!-- Template Selector -->
@@ -67,16 +69,18 @@
             <ComboBox Grid.Row="1"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
+                      Name="cmbTemplates"
                       HorizontalAlignment="Stretch"
                       Height="25"
                       Margin="0,10,0,0"
                       ItemsSource="{Binding TemplateFiles}"
                       DisplayMemberPath="DisplayName"
                       SelectedValuePath="FullPath"
-                      SelectedValue="{Binding SelectedTemplateFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                      SelectedValue="{Binding SelectedTemplateFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectionChanged="cmbTemplates_SelectionChanged"/>
         </Grid>
 
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden" Name="GameOptionsScrollViewer">
             <ItemsControl ItemsSource="{Binding Options}" ItemTemplate="{StaticResource OptionRowTemplate}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

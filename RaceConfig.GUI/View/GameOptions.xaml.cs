@@ -27,5 +27,10 @@ namespace RaceConfig.GUI.View
             GameOptionsViewModel vm = new GameOptionsViewModel();
             DataContext = vm;
         }
+
+        private void cmbTemplates_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GameOptionsScrollViewer?.ScrollToTop();
+        }
     }
 }

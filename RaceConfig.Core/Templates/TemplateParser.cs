@@ -139,7 +139,12 @@ public static class TemplateParser
                     KeyPath = $"{gameName}.{key}",
                     DisplayName = key,
                     Type = OptionType.Distribution,
-                    Weights = optionItems
+                    Weights = optionItems,
+                    DistributionWeights = optionItems.Select(kv => new RandomizerOption.ItemWeight
+                    {
+                        Key = kv.Key,
+                        Value = kv.Value
+                    }).ToList(),
                 };
             }
             // Bool

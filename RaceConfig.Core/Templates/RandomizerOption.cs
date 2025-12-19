@@ -16,7 +16,14 @@ public sealed class RandomizerOption
     public int? Max { get; init; }
     public int? DefaultNumeric { get; init; }
 
+    // Distribution Properties
     public List<ItemWeight>? DistributionWeights { get; init; }
+
+    // List properties
+    public List<string>? CustomList { get; init; } = new List<string>();
+
+    // Dictionary properties
+    public Dictionary<string, string>? CustomDictionary { get; init; } = new Dictionary<string, string>();
 
     public class ItemWeight
     {

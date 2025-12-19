@@ -101,7 +101,7 @@
     <DataTemplate x:Key="OptionRowTemplate" DataType="{x:Type core:RandomizerOption}">
         <Grid Margin="0,10,0,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition SharedSizeGroup="OptionLabel" Width="200"/>
+                <ColumnDefinition SharedSizeGroup="OptionLabel" Width="300"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 

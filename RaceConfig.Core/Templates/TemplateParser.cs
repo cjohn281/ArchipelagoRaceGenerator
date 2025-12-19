@@ -144,7 +144,7 @@ public static class TemplateParser
                     {
                         Key = kv.Key,
                         Value = kv.Value
-                    }).ToList(),
+                    }).ToList()
                 };
             }
             // Bool
